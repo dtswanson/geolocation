@@ -5,37 +5,46 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
   <style>
     #map {
       height: 400px;
       width: 100%;
+      display: none; /* Initially hide the map */
     }
   </style>
 </head>
-<body>
-  <h1>HTML Geolocation</h1>
-  <p>Click the button to get your coordinates and display them on the map.</p>
-  <button onclick="getLocation()">Try It</button>
-  <p id="demo"></p>
-  <div id="map"></div>
+<body class="bg-light">
+  <div class="container mt-5">
+    <div class="text-center">
+      <h1 class="animate__animated animate__fadeInDown">HTML Geolocation</h1>
+      <p class="animate__animated animate__fadeInUp">Click the button to get your coordinates and display them on the map.</p>
+      <button id="geoButton" class="btn btn-primary animate__animated animate__pulse">Try It</button>
+      <p id="demo" class="mt-3 animate__animated"></p>
+    </div>
+    <div id="map" class="animate__animated mt-4"></div>
+  </div>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
-    const x = document.getElementById("demo");
+    const x = $("#demo");
     let map;
 
     function getLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
       } else {
-        x.innerHTML = "Geolocation is not supported by this browser.";
+        x.html("Geolocation is not supported by this browser.");
       }
     }
 
     function showPosition(position) {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
-      x.innerHTML = "Latitude: " + lat + "<br>Longitude: " + lon;
+      x.html("Latitude: " + lat + "<br>Longitude: " + lon);
 
       if (!map) {
         map = L.map('map').setView([lat, lon], 13);
@@ -49,24 +58,34 @@
       L.marker([lat, lon]).addTo(map)
         .bindPopup("You are here.")
         .openPopup();
+
+      // Show the map with animation
+      $("#map").fadeIn().addClass("animate__fadeIn");
     }
 
     function showError(error) {
       switch(error.code) {
         case error.PERMISSION_DENIED:
-          x.innerHTML = "User denied the request for Geolocation.";
+          x.html("User denied the request for Geolocation.");
           break;
         case error.POSITION_UNAVAILABLE:
-          x.innerHTML = "Location information is unavailable.";
+          x.html("Location information is unavailable.");
           break;
         case error.TIMEOUT:
-          x.innerHTML = "The request to get user location timed out.";
+          x.html("The request to get user location timed out.");
           break;
         case error.UNKNOWN_ERROR:
-          x.innerHTML = "An unknown error occurred.";
+          x.html("An unknown error occurred.");
           break;
       }
     }
+
+    $(document).ready(function() {
+      $("#geoButton").click(function() {
+        $(this).addClass("animate__bounceOut");
+        getLocation();
+      });
+    });
   </script>
 </body>
 </html>
