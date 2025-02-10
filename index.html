@@ -14,11 +14,6 @@
       height: 400px;
       width: 100%;
       margin-top: 20px;
-      transition: opacity 1s ease-in-out;
-      opacity: 0;
-    }
-    #map.visible {
-      opacity: 1;
     }
   </style>
 </head>
@@ -54,7 +49,6 @@
       L.marker([lat, lon]).addTo(map)
         .bindPopup("You are here.")
         .openPopup();
-      document.getElementById('map').classList.add('visible');
     }
     function showError(error) {
       switch(error.code) {
